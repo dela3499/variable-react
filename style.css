@@ -6,7 +6,9 @@ body {
     -ms-user-select: none;
     user-select: none;
     font-family: raleway;
-    font-size: 5vw;
+    font-size: 3em;
+    color: white;
+    background: #4a774f;
 }
 
 .variable {
@@ -15,10 +17,17 @@ body {
 
 #content {
     padding: 7vh;
+    padding-top: 18vh;
 }
 
 #total {
-    margin-top: 1em;
-    font-size: 6.5vw;
+    margin-top: 1em;;
     font-weight: 700;
+}
+#total .value {
+    background: rgba(127, 230, 127, 0.3);
+    border: 0.2em;
+    border-radius: 0.4em;
+    padding: 0.08em 0.2em;
+    padding-bottom: 0.2em
 }

@@ -3,6 +3,18 @@
 var pluralize = function (singular, plural, num) {
         return num == 1 ? singular : plural;
     };
+
+Number.prototype.formatMoney = function(c, d, t){
+var n = this, 
+    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+    d = d == undefined ? "." : d, 
+    t = t == undefined ? "," : t, 
+    s = n < 0 ? "-" : "", 
+    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+    j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
+
 var SomeComponent = React.createClass({
     getInitialState: function () {
         return {payrate: 15,
@@ -52,14 +64,14 @@ var SomeComponent = React.createClass({
                         callback={function (x) {t.setState({weeks: x})}}
                       />,
             rawTotal = Math.floor(Math.floor(t.state.payrate) * Math.floor(t.state.hours) * Math.floor(t.state.days) * Math.floor((52 - t.state.weeks))),
-            total = "$" + rawTotal;
+            total = "$" + (rawTotal).formatMoney(0);
         return (
             <div>
                 I get paid {payrate} per hour. <br/>
                 I work {hours} a day. <br/>
                 I go to work {days} a week. <br/>
                     
-                <div id="total">So I make {total} a year.</div>
+                <div id="total">So I make <span className="value">{total}</span> a year.</div>
             
             </div>
         );
