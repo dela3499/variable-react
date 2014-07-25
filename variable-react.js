@@ -38,21 +38,23 @@ var Variable = React.createClass({
         return {value: this.props.init || average(this.props.limits), 
                 dragging: false};
     },
-    componentDidUpdate: function () {
-        f = this.props.callback;
-        if (f) {f(this.state.value)};
-    },
-    componentDidMount: function (root) {
+    componentDidMount: function () {
         var t = this;
         $(document).mousemove(function (e) {
             if (t.state.dragging) {
                 var range = t.props.limits[1] - t.props.limits[0],
                     dragRange = t.props.dragRange || 100,
                     mouseY = e.clientY || e.pageY,
-                    value = saturate(t.state.startVal + (range)*((mouseY - t.state.mouseY0)/dragRange), t.props.limits);
+                    value = saturate(t.state.startVal + (range)*(-(mouseY - t.state.mouseY0)/dragRange), t.props.limits);
                 t.setState({value: value});
             };
         });
+        var f = t.props.callback;
+        setInterval(function () {
+            if (t.state.dragging) {
+                if (f) { f(t.state.value) }; //not sure how to handle callback. If callback sets parent state, then child component updates again without needing to.
+            }
+        }, 100);
     },
     handleMouseDown: function (e) {
         var component = this;
@@ -71,7 +73,7 @@ var Variable = React.createClass({
     render: function () {
         var format = this.props.format || function (x) {return x};
         return (
-            <span onMouseDown={this.handleMouseDown} onMouseOver={this.handleMouseOver}>
+            <span className="variable" onMouseDown={this.handleMouseDown} onMouseOver={this.handleMouseOver}>
             {format(this.state.value)}
             </span>
         );
