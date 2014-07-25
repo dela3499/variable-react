@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="js/react.js"></script>
+    <script src="js/JSXTransformer.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href='http://fonts.googleapis.com/css?family=Raleway:300,400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Josefin+Sans:400,700' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <div id='content'></div>
+    <script type='text/jsx' src="variable-react.js"></script>
+    <script type="text/jsx">
+        /** @jsx React.DOM */
+        var SomeComponent = React.createClass({
+            render: function () {
+                var format = function (x) {
+                    return Math.floor(x)
+                };
+                var printValueToConsole = function (x) {console.log(format(x))};
+                return (
+                    <div>
+                        I eat <Variable init={2} limits={[2,20]} format={format} callback={printValueToConsole}/> bananas a day.
+                    </div>
+                );
+            }
+        });
+            
+
+        React.renderComponent(
+            <SomeComponent/>,
+            document.getElementById('content')
+        );
+    </script>    
+</body>
+</html>
+
+
+
