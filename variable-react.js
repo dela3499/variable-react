@@ -23,43 +23,44 @@ var saturate = function (value,limits) {
 var Variable = React.createClass({
     /*
     Required Properties: 
+     value
      limits (array with two element: [minimum value and maximum value]
+     callback (calls this function on every state change, with current value as argument / use this callback to set the value property of this component)
     
     Optional Properties: 
-     callback (calls this function on every state change, with current value as argument)
-     init
-     dragRange (mouse covers entire range of values after moving this many pixels)
-     format  (a function to prepare numerical value for display - e.g. rounding, date/time formatting, currency)
+     sensitivity (the greater the sensitivity, the quicker the mouse moves through the range of provided values)
+     format  (a function to prepare numerical value for display - e.g. date/time formatting, currency)
+     transformation (function to transform the value itself, rather than just its display. Use for rounding, primarily)
     
     Notes: 
      1. this component produces a <span> element with a class called "variable" (use this for styling)
     */
     getInitialState: function () {
-        return {value: this.props.init || average(this.props.limits), 
-                dragging: false};
+        return {dragging: false};
     },
     componentDidMount: function () {
         var t = this;
+        var currentValue = this.props.value;
         $(document).mousemove(function (e) {
             if (t.state.dragging) {
                 var range = t.props.limits[1] - t.props.limits[0],
-                    dragRange = t.props.dragRange || 100,
-                    mouseY = e.clientY || e.pageY,
-                    value = saturate(t.state.startVal + (range)*(-(mouseY - t.state.mouseY0)/dragRange), t.props.limits);
-                t.setState({value: value});
+                    dragRange = 100 / (t.props.sensitivity || 1),
+                    mouseY = e.clientY || e.pageY;
+                currentValue = saturate(t.state.startVal + (range)*(-(mouseY - t.state.mouseY0)/dragRange), t.props.limits);
             };
         });
         var f = t.props.callback;
+        var transform = this.props.transformation || function (x) {return x};
         setInterval(function () {
             if (t.state.dragging) {
-                if (f) { f(t.state.value) }; //not sure how to handle callback. If callback sets parent state, then child component updates again without needing to.
+                f(transform(currentValue));
             }
-        }, 100);
+        }, 10);
     },
     handleMouseDown: function (e) {
         var component = this;
         this.setState({dragging: true, 
-                       startVal: this.state.value,
+                       startVal: this.props.value,
                        mouseY0: (e.clientY || e.pageY)});
         $("body").css({cursor: "ns-resize"});
         $(document).one("mouseup", function () {
@@ -74,7 +75,7 @@ var Variable = React.createClass({
         var format = this.props.format || function (x) {return x};
         return (
             <span className="variable" onMouseDown={this.handleMouseDown} onMouseOver={this.handleMouseOver}>
-            {format(this.state.value)}
+            {format(this.props.value)}
             </span>
         );
     }

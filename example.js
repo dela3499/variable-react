@@ -30,40 +30,39 @@ var SomeComponent = React.createClass({
             return value + " " + noun + " ";
         };
         var payrate = <Variable 
-                        init={15} 
+                        value={t.state.payrate} 
                         limits={[0,100]} 
-                        dragRange={700} 
-                        format={function (value) {return "$" + Math.floor(value)}}
+                        sensitivity={1} 
+                        format={function (value) {return "$" + value}}
+                        transformation={function (x) {return Math.floor(x)}}
                         callback={function (x) {t.setState({payrate: x})}}
                       />,
             hours   = <Variable 
-                        init={8} 
+                        value={t.state.hours} 
                         limits={[0,24]} 
-                        dragRange={500} 
-                        format={function (value) {
-                            var x = Math.floor(value);
-                            return x + " " + pluralize("hour", "hours", x)}}
+                        sensitivity={1} 
+                        format={function (value) {return value + " " + pluralize("hour", "hours", value)}}
+                        transformation={function (x) {return Math.floor(x)}}
                         callback={function (x) {t.setState({hours: x})}}
                       />,
             days    = <Variable 
-                        init={5} 
+                        value={t.state.days} 
                         limits={[0,7]} 
-                        dragRange={200} 
+                        sensitivity={1} 
                         format={function (value) {
-                            var x = Math.floor(value);
-                            return x + " " + pluralize("day", "days", x)}}
+                            return value + " " + pluralize("day", "days", value)}}
+                        transformation={function (x) {return Math.floor(x)}}
                         callback={function (x) {t.setState({days: x})}}
                       />, 
             weeks   = <Variable 
-                        init={3} 
+                        value={t.state.weeks} 
                         limits={[0,10]} 
-                        dragRange={200} 
-                        format={function (value) {
-                            var x = Math.floor(value);
-                            return x + " " + pluralize("week", "weeks", x)}}
+                        sensitivity={1} 
+                        format={function (value) {return value + " " + pluralize("week", "weeks", value)}}
+                        transformation={function (x) {return Math.floor(x)}}
                         callback={function (x) {t.setState({weeks: x})}}
                       />,
-            rawTotal = Math.floor(Math.floor(t.state.payrate) * Math.floor(t.state.hours) * Math.floor(t.state.days) * Math.floor((52 - t.state.weeks))),
+            rawTotal = Math.floor(t.state.payrate * t.state.hours * t.state.days * (52 - t.state.weeks)),
             total = "$" + (rawTotal).formatMoney(0);
         return (
             <div>
