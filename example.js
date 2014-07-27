@@ -66,6 +66,7 @@ var SomeComponent = React.createClass({
             total = "$" + (rawTotal).formatMoney(0);
         return (
             <div>
+                <div className="explanation">Drag the underlined numbers up or down<br/> and see the annual earnings figure update. </div>
                 I get paid {payrate} per hour. <br/>
                 I work {hours} a day. <br/>
                 I go to work {days} a week. <br/>

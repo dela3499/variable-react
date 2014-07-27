@@ -13,6 +13,7 @@ body {
 
 .variable {
     font-weight: 700;
+    border-bottom: 5px solid rgba(0, 0, 0, 0.19);
 }
 
 #content {
@@ -30,4 +31,12 @@ body {
     border-radius: 0.4em;
     padding: 0.08em 0.2em;
     padding-bottom: 0.2em
+}
+
+.explanation {
+    font-family: Raleway;
+    font-size: .3em;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.38);
+    padding-bottom: 3em;
 }
